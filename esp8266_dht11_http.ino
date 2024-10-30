@@ -1,5 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <DHT.h>
+#include <WiFiClientSecure.h>
 
 // Define the DHT11 sensor pin and type
 #define DHTPIN D1 // GPIO pin where DHT11 is connected, for this example is D1
@@ -8,12 +9,14 @@
 DHT dht(DHTPIN, DHTTYPE);
 
 // WiFi credentials
-const char* ssid = "YOUR_WIFI_SSID";      // Replace with your WiFi SSID
-const char* password = "YOUR_WIFI_PASSWORD"; // Replace with your WiFi password
+const char* ssid = "YOUR_NETWORK_SSID";      // Replace with your WiFi SSID
+const char* password = "YOUR_NETWORK_PASSWORD"; // Replace with your WiFi password
 
 // Server settings
-const char* server = "YOUR_SERVER_IP"; // IP address of the Python server
-const int serverPort = "YOUR_SERVER_PORT";          // Port number for server
+const char* server = "YOUR_SERVER_IP/DOMAIN"; // IP address of the Python server
+const int serverPort = 443;          // Port number for server, 443 for default HTTPS
+
+WiFiClientSecure client;
 
 void setup() {
   Serial.begin(115200);
@@ -30,10 +33,11 @@ void setup() {
   }
   
   Serial.println("Connected to WiFi!");
+
+  client.setInsecure();
 }
 
 void loop() {
-  delay(2000); // Wait between readings, for this example, 2 secs
 
   // Read temperature and humidity
   float humidity = dht.readHumidity();
@@ -47,10 +51,12 @@ void loop() {
 
   // Send data to server
   sendToServer(temperature, humidity);
+
+  //Delay for next scan, 1h for this example
+  delay(3600000)
 }
 
 void sendToServer(float temp, float hum) {
-  WiFiClient client;
   if (!client.connect(server, serverPort)) {
     Serial.println("Connection to server failed");
     return;
@@ -59,14 +65,14 @@ void sendToServer(float temp, float hum) {
   // Create data string
   String postData = "temperature=" + String(temp) + "&humidity=" + String(hum);
   // JSON example below
-  // String postData = "{\"temperature\": " + String(temperature) + ", \"humidity\": " + String(humidity) + "}";
+  // String postData = "{\"temp\": " + String(temp) + ", \"humidity\": " + String(hum) + "}";
 
   // Send HTTP POST request to the Python server
   client.println("POST /data HTTP/1.1");
   client.println("Host: " + String(server));
-  client.println("Content-Type: application/x-www-form-urlencoded");
+  // client.println("Content-Type: application/x-www-form-urlencoded");
   // If you want JSON data, comment above and uncomment below
-  // client.println("Content-Type: application/json");
+  client.println("Content-Type: application/json");
   client.print("Content-Length: ");
   client.println(postData.length());
   client.println();
