@@ -27,8 +27,10 @@ http://arduino.esp8266.com/stable/package_esp8266com_index.json
 - Tìm kiếm package **esp8266** của _ESP8266 Community_ và install.
 - **Tools** > **Board** > **esp8266** > **NodeMCU 1.0 (ESP-12E Module)**
 - **Tools** > **Ports** > chọn port kết nối (**COMX** với Windows hoặc **/dev/ttyUSBX** với Linux/macOS)
-2. Code
+
+**2. Code**
 Sử dụng code đã có trong file `esp8266_dht11_http.ino` (nhớ thay giá trị cho các biến)
-3. Run
+
+**3. Run**
 - Khởi chạy `server.py`
 - Import code vào ESP8266
