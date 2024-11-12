@@ -1,5 +1,5 @@
-# This file create a Flask allowed-HTTP server to get data from ESP8266 and send to HTTPS server. 
-# If your server accept HTTP, you can ignore this
+# This file create a Flask HTTP server to get data from ESP8266 and send to HTTPS server. 
+# To use this server, change WiFiClientSecure to WiFiClient in esp8266_dht11_http.ino 
 
 from flask import Flask, request, jsonify
 import requests
