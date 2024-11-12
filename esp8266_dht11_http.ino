@@ -13,7 +13,7 @@ const char* ssid = "YOUR_NETWORK_SSID";      // Replace with your WiFi SSID
 const char* password = "YOUR_NETWORK_PASSWORD"; // Replace with your WiFi password
 
 // Server settings
-const char* server = "YOUR_SERVER_IP/DOMAIN"; // IP address of the Python server
+const char* server = "YOUR_SERVER"; // IP address of the Python server
 const int serverPort = 443;          // Port number for server, 443 for default HTTPS
 
 WiFiClientSecure client;
@@ -53,7 +53,7 @@ void loop() {
   sendToServer(temperature, humidity);
 
   //Delay for next scan, 1h for this example
-  delay(3600000)
+  delay(360000);
 }
 
 void sendToServer(float temp, float hum) {
@@ -63,16 +63,18 @@ void sendToServer(float temp, float hum) {
   }
 
   // Create data string
-  String postData = "temperature=" + String(temp) + "&humidity=" + String(hum);
+  // String postData = "temperature=" + String(temp) + "&humidity=" + String(hum);
   // JSON example below
-  // String postData = "{\"temp\": " + String(temp) + ", \"humidity\": " + String(hum) + "}";
+  String postData = "{\"temp\": \"" + String(temp) + "\", \"humidity\": \"" + String(hum) + "\"}";
+  Serial.println(postData);
 
   // Send HTTP POST request to the Python server
-  client.println("POST /data HTTP/1.1");
+  client.println("POST /weather HTTP/1.1");
   client.println("Host: " + String(server));
   // client.println("Content-Type: application/x-www-form-urlencoded");
   // If you want JSON data, comment above and uncomment below
   client.println("Content-Type: application/json");
+  client.println("Connection: close");
   client.print("Content-Length: ");
   client.println(postData.length());
   client.println();
