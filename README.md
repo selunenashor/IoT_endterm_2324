@@ -6,10 +6,6 @@
 - USB to MicroUSB cable
 #### Phần mềm
 - Arduino IDE. Link tải: https://www.arduino.cc/en/software
-- Python và các package liên quan: Flask, requests
-```
-pip install Flask requests
-```
 ## Hướng dẫn sử dụng
 #### Nối mạch
 - GND ESP8266 -> GND DHT11
