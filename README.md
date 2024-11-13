@@ -32,5 +32,4 @@ http://arduino.esp8266.com/stable/package_esp8266com_index.json
 Sử dụng code đã có trong file `esp8266_dht11_http.ino` (nhớ thay giá trị cho các biến)
 
 **3. Run**
-- Khởi chạy `server.py` (nếu cần)
 - Import code vào ESP8266
